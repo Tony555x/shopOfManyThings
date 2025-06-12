@@ -15,7 +15,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("ShopOfManyThings")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+f76d8e41c4dc64279c58343c1bd811464041b8f2")]
 [assembly: System.Reflection.AssemblyProductAttribute("ShopOfManyThings")]
 [assembly: System.Reflection.AssemblyTitleAttribute("ShopOfManyThings")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

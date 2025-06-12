@@ -1,23 +1,23 @@
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using ShopOfManyThings.Data;
+using ShopOfManyThings.Data.Models;
 using ShopOfManyThings.Models;
+using ShopOfManyThings.Data;
 
 namespace ShopOfManyThings.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly ApplicationDbContext _context;
+        private readonly IRepository _repository;
 
-        public HomeController(ApplicationDbContext context)
+        public HomeController(IRepository repository)
         {
-            _context = context;
+            _repository = repository;
         }
 
         public async Task<IActionResult> Index()
         {
-            var products = await _context.Products
-                .OrderByDescending(p => p.Price) // mock "popularity"
+            var products = (await _repository.GetAllAsync<Product>())
+                .OrderByDescending(p => p.Price)
                 .Take(4)
                 .Select(p => new ProductViewModel
                 {
@@ -27,10 +27,11 @@ namespace ShopOfManyThings.Controllers
                     Category = p.Category,
                     Description = p.Description
                 })
-                .ToListAsync();
+                .ToList();
 
             return View(products);
         }
+
         public IActionResult About() => View();
     }
 }

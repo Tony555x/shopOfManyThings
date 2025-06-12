@@ -1,26 +1,27 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using ShopOfManyThings.Data;
 using ShopOfManyThings.Data.Models;
 using ShopOfManyThings.Models;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace ShopOfManyThings.Controllers
 {
     public class ProductController : Controller
     {
-        private readonly ApplicationDbContext _context;
+        private readonly IRepository _repository;
         private readonly UserManager<User> _userManager;
 
-        public ProductController(ApplicationDbContext context, UserManager<User> userManager)
+        public ProductController(IRepository repository, UserManager<User> userManager)
         {
-            _context = context;
+            _repository = repository;
             _userManager = userManager;
         }
 
         public async Task<IActionResult> Index()
         {
-            var products = await _context.Products
+            var products = (await _repository.GetAllAsync<Product>())
                 .Select(p => new ProductViewModel
                 {
                     Id = p.Id,
@@ -29,7 +30,7 @@ namespace ShopOfManyThings.Controllers
                     Category = p.Category,
                     Description = p.Description
                 })
-                .ToListAsync();
+                .ToList();
 
             return View(products);
         }
@@ -38,7 +39,7 @@ namespace ShopOfManyThings.Controllers
         [HttpGet]
         public async Task<IActionResult> Details(int id)
         {
-            var product = await _context.Products
+            var product = (await _repository.GetAllAsync<Product>())
                 .Where(p => p.Id == id)
                 .Select(p => new ProductViewModel
                 {
@@ -48,7 +49,7 @@ namespace ShopOfManyThings.Controllers
                     Category = p.Category,
                     Description = p.Description
                 })
-                .FirstOrDefaultAsync();
+                .FirstOrDefault();
 
             if (product == null) return NotFound();
 
@@ -70,8 +71,8 @@ namespace ShopOfManyThings.Controllers
             if (user.Cart == null)
             {
                 user.Cart = new Cart { UserId = user.Id };
-                _context.Carts.Add(user.Cart);
-                await _context.SaveChangesAsync();
+                await _repository.AddAsync(user.Cart);
+                await _repository.SaveChangesAsync();
             }
 
             var existing = user.Cart.CartProducts.FirstOrDefault(cp => cp.ProductId == id);
@@ -89,7 +90,8 @@ namespace ShopOfManyThings.Controllers
                 });
             }
 
-            await _context.SaveChangesAsync();
+            await _repository.SaveChangesAsync();
+
             return RedirectToAction("Index", "Cart");
         }
     }

@@ -2,8 +2,10 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using ShopOfManyThings.Data;
 using ShopOfManyThings.Data.Models;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace ShopOfManyThings.Controllers;
 
@@ -11,12 +13,12 @@ namespace ShopOfManyThings.Controllers;
 [Authorize]
 public class CartController : Controller
 {
-    private readonly ApplicationDbContext _context;
+    private readonly IRepository _repository;
     private readonly UserManager<User> _userManager;
 
-    public CartController(ApplicationDbContext context, UserManager<User> userManager)
+    public CartController(IRepository repository, UserManager<User> userManager)
     {
-        _context = context;
+        _repository = repository;
         _userManager = userManager;
     }
 
@@ -49,7 +51,7 @@ public class CartController : Controller
         if (item != null)
         {
             user.Cart.CartProducts.Remove(item);
-            await _context.SaveChangesAsync();
+            await _repository.SaveChangesAsync();
         }
 
         return RedirectToAction("Index");

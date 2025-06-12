@@ -326,3 +326,4 @@ D:\softuni\ShopOfManyThings\obj\Debug\net9.0\refint\ShopOfManyThings.dll
 D:\softuni\ShopOfManyThings\obj\Debug\net9.0\ShopOfManyThings.pdb
 D:\softuni\ShopOfManyThings\obj\Debug\net9.0\ShopOfManyThings.genruntimeconfig.cache
 D:\softuni\ShopOfManyThings\obj\Debug\net9.0\ref\ShopOfManyThings.dll
+D:\softuni\ShopOfManyThings\obj\Debug\net9.0\ShopOfManyThings.sourcelink.json
